@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(express.json({ limit: "10mb" }));
 
-app.use("/user", require("./routes/userRoutes"));
+// app.use("/user", require("./routes/userRoutes"));
 
 const path = require('path');
 
