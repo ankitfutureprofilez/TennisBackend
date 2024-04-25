@@ -8,10 +8,16 @@ exports.login = catchAsync(async (req, res, next) => {
     }
     // Logic for checking data with details in env will be placed here
     if(email!=process.env.email){
-        return next(new AppError("Invalid email", 401));
+        res.json({
+            status: false,
+            message: "Invalid email",
+          });
     }
     if(password!=process.env.password){
-        return next(new AppError("Wrong password", 401));
+        res.json({
+            status: false,
+            message: "Wrong Password",
+          });
     }  
     res.json({
       status: true,

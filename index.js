@@ -1,5 +1,7 @@
 const express = require("express");
+const fileUpload = require('express-fileupload');
 const app = express();
+app.use(fileUpload());
 const cors = require("cors");
 const corsOptions = {
   origin: '*',
@@ -9,7 +11,7 @@ const corsOptions = {
 
 
 const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 
 app.use(cors(corsOptions));
 const dotenv = require("dotenv");
@@ -17,12 +19,11 @@ require("./mongoConfig");
 dotenv.config();
 const morgan = require('morgan')
 app.use(morgan('dev')); 
-app.use(express.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json());
+// app.use(bodyParser.urlencoded());
 
-app.use(express.json({ limit: "10mb" }));
 
-app.use("/pdf", require("./routes/pdfRoutes"));
+app.use("/player", require("./routes/playerDataRoutes"));
 app.use("/user", require("./routes/userRoutes"));
 
 const path = require('path');
