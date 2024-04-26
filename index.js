@@ -13,6 +13,13 @@ const corsOptions = {
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));
 
+app.get("/", (req, res) => {
+  res.json({
+    msg:'Okay',
+    status:200
+  })
+});
+
 app.use(cors(corsOptions));
 const dotenv = require("dotenv");
 require("./mongoConfig");
