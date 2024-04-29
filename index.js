@@ -10,9 +10,13 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8000;
-
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(fileUpload());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
