@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
   res.json({
     msg:'Okay',
     status:200
-  })
+  }) 
 });
 
 
