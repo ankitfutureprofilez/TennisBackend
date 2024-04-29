@@ -1,16 +1,15 @@
 const express = require("express");
 const fileUpload = require('express-fileupload');
 const app = express();
-app.use(fileUpload());
+
 const cors = require("cors");
 const corsOptions = {
-  origin: 'https://tenniskhelo.com/',
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, 
 };
-
-
+app.use(cors(corsOptions));
+app.use(fileUpload());
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));
 
@@ -21,7 +20,7 @@ app.get("/", (req, res) => {
   })
 });
 
-app.use(cors(corsOptions));
+
 const dotenv = require("dotenv");
 require("./mongoConfig");
 dotenv.config();
