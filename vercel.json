@@ -13,12 +13,7 @@
    ],
    "routes": [
      { "src": "/(.*)", "dest": "/" }
-   ],
-   "rewrites": [
-     { "source": "/(.*)", "destination": "/" }
-   ],
-  
-   "cleanUrls": true,
-   "trailingSlash": true
+   ]
  }
- 
+
+
