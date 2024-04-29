@@ -75,14 +75,14 @@ exports.add = catchAsync(async (req, res) => {
   const { category, group, data, pin } = req.body;
   let searchTerm = `${category}${group}`;
   if (!data) {
-    res.status(500).json({
+    res.status(400).json({
       status: false,
       message: "PDF is not sent",
     });
   }
   if(pin!=process.env.SECRET_PIN)
   {
-    res.status(500).json({
+    res.status(400).json({
       status: false,
       message: "Invalid Secret Pin",
     });
@@ -91,7 +91,7 @@ exports.add = catchAsync(async (req, res) => {
   const found = options.find((item) => item === searchTerm);
 
   if (!found) {
-    res.status(500).json({
+    res.status(400).json({
       status: false,
       message: "Invalid category or group selected !!",
     });
