@@ -1,48 +1,35 @@
 const express = require("express");
-const fileUpload = require('express-fileupload');
-const app = express();
-app.use(fileUpload());
 const cors = require("cors");
-const corsOptions = {
-  origin: 'https://tenniskhelo.com/',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, 
-};
-
-
+const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '50mb' }));
+const dotenv = require("dotenv");
+const morgan = require('morgan');
+const mongoConfig = require("./mongoConfig");
 
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 8000;
+
+// Middleware
+app.use(cors());
+app.use(fileUpload());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev')); 
+
+// Routes
 app.get("/", (req, res) => {
   res.json({
-    msg:'Okay',
-    status:200
-  })
+    msg: 'Okay',
+    status: 200
+  });
 });
-
-app.use(cors(corsOptions));
-const dotenv = require("dotenv");
-require("./mongoConfig");
-dotenv.config();
-const morgan = require('morgan')
-app.use(morgan('dev')); 
-app.use(express.json());
-// app.use(bodyParser.urlencoded());
-
 
 app.use("/player", require("./routes/playerDataRoutes"));
 app.use("/user", require("./routes/userRoutes"));
 
-const path = require('path');
-
-app.get("/", (req, res) => {
-  res.json({
-    msg:'Okay',
-    status:200
-  })
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running at port : ${PORT}`);
 });
-
-const PORT =  process?.env?.PORT
-
-app.listen(PORT, () => console.log("Server is running at port : " + PORT));
- 
