@@ -9,10 +9,11 @@
    ],
    "functions": {
       "source": "/api/(.*)",
-     "maxDuration": 30
+     "maxDuration": 30,
+     "memory": 3009
    },
    "headers": [
-      
+
      {
        "source": "/api/(.*)",
        "headers": [
