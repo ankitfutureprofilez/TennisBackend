@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 
 const corsOptions = {
-  origin: '*',
+  origin: 'https://tenniskhelo.com',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, 
 };
