@@ -8,8 +8,8 @@
      { "src": "/(.*)", "dest": "/" }
    ],
    "functions": {
-     "player/**/*.js": {
-       "maxDuration": 30
+     "./index.js": {
+       "maxDuration": 25
      }
    },
    "headers": [
