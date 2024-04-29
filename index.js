@@ -1,14 +1,15 @@
 const express = require("express");
-const fileUpload = require('express-fileupload');
 const app = express();
-
 const cors = require("cors");
+
 const corsOptions = {
   origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, 
 };
 app.use(cors(corsOptions));
+
+const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));

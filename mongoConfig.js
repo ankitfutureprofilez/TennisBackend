@@ -4,7 +4,7 @@ dotenv.config();
 // console.log("process.env.DB_URL}",process.env.DB_URL)
 
 mongoose.connect(`${process.env.DB_URL}`, {
-   useNewUrlParser: true,
+   // useNewUrlParser: true,
    serverSelectionTimeoutMS: 5000,
    autoIndex: false,  
    maxPoolSize: 10,  
