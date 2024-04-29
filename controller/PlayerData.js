@@ -55,6 +55,8 @@ exports.add = catchAsync(async (req, res) => {
     if (isPresent) {
       const updatedResult = await PlayerRanking.updateOne(
         { name: searchTerm },
+
+        
         { json: data }
       );
       if (updatedResult.acknowledged) {
