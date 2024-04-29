@@ -1,12 +1,6 @@
 {
    "version": 2,
    "name": "Tennis Khelo Backend",
-   "headers": [
-      {
-        "key": "access-control-allow-origin",
-        "value": "*"
-      }
-    ],
    "builds": [
      { 
        "src": "./index.js", 
