@@ -113,7 +113,7 @@ exports.add = catchAsync(async (req, res) => {
       });
       return;
     }
-    console.log("File created or updated successfully.");
+    console.log(`File created or updated successfully.${err}`);
     res.status(200).json({
       status: true,
       message: "Data added successfully",
