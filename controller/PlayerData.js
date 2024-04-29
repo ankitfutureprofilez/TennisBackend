@@ -99,7 +99,7 @@ exports.add = catchAsync(async (req, res) => {
   }
 
   // File path
-  const filePath = `./utils/PlayerData/${category}${group}.json`;
+  const filePath = `${category}${group}.json`;
   const jsonData = JSON.parse(data);
 
   // Write data to the file
@@ -113,7 +113,7 @@ exports.add = catchAsync(async (req, res) => {
       });
       return;
     }
-    console.log(`File created or updated successfully.${err}`);
+    console.log("File created or updated successfully");
     res.status(200).json({
       status: true,
       message: "Data added successfully",
@@ -133,7 +133,7 @@ exports.add = catchAsync(async (req, res) => {
 exports.list = catchAsync(async (req, res, next) => {
 
   const fileName = req.params.id;
-  const folderPath = `./utils/PlayerData/${fileName}`; // Path to the folder
+  const folderPath = `${fileName}`; // Path to the folder
 
   // console.log("folderPath", folderPath)
   // const found =  searchFile(folderPath, fileName, next);
