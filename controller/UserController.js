@@ -6,6 +6,8 @@ exports.login = catchAsync(async (req, res, next) => {
     if (!email || !password) {
       return next(new AppError("Email and password is required !!", 401));
     }
+
+    
     // Logic for checking data with details in env will be placed here
     if(email!=process.env.email){
         res.json({
