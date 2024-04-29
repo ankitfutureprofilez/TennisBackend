@@ -122,16 +122,49 @@ exports.add = catchAsync(async (req, res) => {
   }
 });
 
+// exports.list = catchAsync(async (req, res, next) => {
+//   const fileName = req.params.id;
+//   // const folderPath = `${fileName}`; // Path to the folder
+//   try {
+//     let isPresent = await PlayerRanking.findOne({ name: fileName });
+//     if (isPresent) {
+//       res.json({
+//         status: true,
+//         msg: "data retreived",
+//         content: JSON.parse(isPresent?.json),
+//       });
+//     } else {
+//       res.json({
+//         status: false,
+//         msg: "No data available",
+//       });
+//     }
+//     // const fileStream = fs.readFileSync(`${folderPath}.json`, 'utf-8')
+//     // res.json({
+//     //   status: true,
+//     //   msg: "data retreived",
+//     //   content: JSON.parse(fileStream)
+//     // })
+//   } catch (error) {
+//     res.json({
+//       status: false,
+//       msg: "File not found",
+//     });
+//   }
+// });
+
+
 exports.list = catchAsync(async (req, res, next) => {
   const fileName = req.params.id;
-  // const folderPath = `${fileName}`; // Path to the folder
+  
   try {
-    let isPresent = await PlayerRanking.findOne({ name: fileName });
+    let isPresent = await PlayerRanking.findOne({ name: fileName }).lean().select('json');
+
     if (isPresent) {
       res.json({
         status: true,
-        msg: "data retreived",
-        content: JSON.parse(isPresent?.json),
+        msg: "Data retrieved",
+        content: JSON.parse(isPresent.json),
       });
     } else {
       res.json({
@@ -139,16 +172,11 @@ exports.list = catchAsync(async (req, res, next) => {
         msg: "No data available",
       });
     }
-    // const fileStream = fs.readFileSync(`${folderPath}.json`, 'utf-8')
-    // res.json({
-    //   status: true,
-    //   msg: "data retreived",
-    //   content: JSON.parse(fileStream)
-    // })
   } catch (error) {
+    console.error("Error:", error);
     res.json({
       status: false,
-      msg: "File not found",
+      msg: "Error retrieving data",
     });
   }
 });
