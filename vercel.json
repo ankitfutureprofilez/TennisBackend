@@ -11,8 +11,8 @@
       }
     }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/" }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/$1" }
   ],
   "headers": [
     {
