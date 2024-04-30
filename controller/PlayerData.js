@@ -36,7 +36,7 @@ exports.add = catchAsync(async (req, res) => {
       });
     }
     if (pin != process.env.SECRET_PIN) {
-      res.status(400).json({
+      res.status(401).json({
         status: false,
         message: "Invalid Secret Pin",
       });
@@ -45,7 +45,7 @@ exports.add = catchAsync(async (req, res) => {
     const found = options.find((item) => item === searchTerm);
 
     if (!found) {
-      res.status(400).json({
+      res.status(401).json({
         message: "Invalid category or group selected !!",
       });
       return;
@@ -168,7 +168,7 @@ exports.list = catchAsync(async (req, res, next) => {
         content: JSON.parse(isPresent.json),
       });
     } else {
-      res.status(404).json({
+      res.status(204).json({
         status: false,
         msg: "No data available",
       });
