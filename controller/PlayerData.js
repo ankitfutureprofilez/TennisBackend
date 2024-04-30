@@ -60,12 +60,12 @@ exports.add = catchAsync(async (req, res) => {
         { json: data }
       );
       if (updatedResult.acknowledged) {
-        res.json({
+        res.status(200).json({
           status: true,
           message: "Data Updated Successfully",
         });
       } else {
-        res.json({
+        res.status(500).json({
           status: false,
           message: "Failed to update data",
         });
@@ -79,12 +79,12 @@ exports.add = catchAsync(async (req, res) => {
       });
       const result = await record.save();
       if (result) {
-        res.json({
+        res.status(200).json({
           status: true,
           message: "Data Added Successfully",
         });
       } else {
-        res.json({
+        res.status(500).json({
           status: false,
           error: result,
           message: "Failed to add data",
@@ -162,20 +162,20 @@ exports.list = catchAsync(async (req, res, next) => {
 
     console.log("isPresent",isPresent)
     if (isPresent) {
-      res.json({
+      res.status(200).json({
         status: true,
         msg: "Data retrieved",
         content: JSON.parse(isPresent.json),
       });
     } else {
-      res.json({
+      res.status(404).json({
         status: false,
         msg: "No data available",
       });
     }
   } catch (error) {
     console.error("Error:", error);
-    res.json({
+    res.status(500).json({
       status: false,
       msg: "Error retrieving data",
     });
