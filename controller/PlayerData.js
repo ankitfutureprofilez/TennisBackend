@@ -90,11 +90,10 @@ exports.add = catchAsync(async (req, res) => {
 
 exports.list = catchAsync(async (req, res, next) => {
   const fileName = req.params.id;
+  console.log("fileName",fileName)
   
   try {
     let isPresent = await PlayerRanking.findOne({ name: fileName });
-
-    console.log("isPresent",isPresent)
     if (isPresent) {
       res.status(200).json({
         status: true,
