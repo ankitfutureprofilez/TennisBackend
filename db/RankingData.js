@@ -4,7 +4,7 @@ const PlayerRankingSchema = mongoose.Schema({
   name: String,
   category: String,
   group: String,
-  json: mongoose.Schema.Types.Mixed,
+  json: String,
   updated_at: {
     type: Date,
     default: Date.now,
