@@ -21,7 +21,6 @@ app.get("/", (req, res) => {
   }) 
 });
 
-
 const dotenv = require("dotenv");
 require("./mongoConfig");
 dotenv.config();
