@@ -27,14 +27,9 @@ exports.add = catchAsync(async (req, res) => {
       });
     }
 
-    const { category, group, data, pin } = req.body;
+    const { category, group, data, pin, text } = req.body;
     let searchTerm = `${category}${group}`;
-    if (!data) {
-      res.status(400).json({
-        status: false,
-        message: "PDF is not sent",
-      });
-    }
+     
     if (pin != process.env.SECRET_PIN) {
       res.status(400).json({
         status: false,
@@ -43,7 +38,6 @@ exports.add = catchAsync(async (req, res) => {
     }
 
     const found = options.find((item) => item === searchTerm);
-
     if (!found) {
       res.status(400).json({
         message: "Invalid category or group selected !!",
@@ -51,17 +45,16 @@ exports.add = catchAsync(async (req, res) => {
       return;
     }
     let isPresent = await PlayerRanking.findOne({ name: searchTerm });
-
     if (isPresent) {
-      const updatedResult = await PlayerRanking.updateOne(
-        { name: searchTerm },
-
-        
-        { json: data }
-      );
-      if (updatedResult.acknowledged) {
+      const updatedResult = await PlayerRanking.findOne({name: searchTerm });
+      updatedResult.updated_at =  Date.now();
+      updatedResult.json = text; 
+      updatedResult.group = group;
+      const updated = await updatedResult.save();
+      if (updated) {
         res.json({
           status: true,
+          updated:updated,
           message: "Data Updated Successfully",
         });
       } else {
@@ -75,7 +68,8 @@ exports.add = catchAsync(async (req, res) => {
         name: searchTerm,
         category: category,
         group: group,
-        json: data,
+        json: text,
+        updated_at : Date.now()
       });
       const result = await record.save();
       if (result) {
@@ -124,17 +118,14 @@ exports.add = catchAsync(async (req, res) => {
 
 exports.list = catchAsync(async (req, res, next) => {
   const fileName = req.params.id;
-  console.log("fileName",fileName)
-  // const folderPath = `${fileName}`; // Path to the folder
   try {
     let isPresent = await PlayerRanking.findOne({ name: fileName });
-    console.log("isPresent",isPresent?.updated_at)
     if (isPresent) {
       res.json({
         status: true,
         msg: "data retreived",
         content: JSON.parse(isPresent?.json),
-        created_at:isPresent?.updated_at
+        created_At: isPresent?.updated_at,
       });
     } else {
       res.json({

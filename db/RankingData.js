@@ -5,14 +5,7 @@ const PlayerRankingSchema = mongoose.Schema({
   category: String,
   group: String,
   json: mongoose.Schema.Types.Mixed,
-  updated_at: {
-    type: Date,
-    default: Date.now,
-  },
-  created_at: {
-    type: Date,
-    default: Date.now,
-  },
+  updated_at: Date
 });
 
 module.exports = mongoose.model("PlayerRanking", PlayerRankingSchema);
