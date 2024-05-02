@@ -14,6 +14,8 @@ const options = [
   "BU-14",
   "BU-16",
   "BU-18",
+  "Msingles",
+  "Mdoubles","Wsingles","Wdoubles"
 ];
 
 const upload = multer();
