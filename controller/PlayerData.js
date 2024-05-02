@@ -124,14 +124,17 @@ exports.add = catchAsync(async (req, res) => {
 
 exports.list = catchAsync(async (req, res, next) => {
   const fileName = req.params.id;
+  console.log("fileName",fileName)
   // const folderPath = `${fileName}`; // Path to the folder
   try {
     let isPresent = await PlayerRanking.findOne({ name: fileName });
+    console.log("isPresent",isPresent?.updated_at)
     if (isPresent) {
       res.json({
         status: true,
         msg: "data retreived",
         content: JSON.parse(isPresent?.json),
+        created_at:isPresent?.updated_at
       });
     } else {
       res.json({

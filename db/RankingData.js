@@ -9,6 +9,10 @@ const PlayerRankingSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  created_at: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("PlayerRanking", PlayerRankingSchema);
