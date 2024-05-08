@@ -107,6 +107,7 @@ exports.playerlist = catchAsync(async (req, res, next) => {
         status: true,
         msg: "Data retrieved",
         content: record,
+        updatedAt: record?.updatedAt,
       });
     } else {
       res.json({
