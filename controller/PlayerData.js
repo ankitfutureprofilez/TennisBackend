@@ -97,13 +97,12 @@ exports.list = catchAsync(async (req, res, next) => {
 });
 
 
-exports.playerlist = catchAsync(async (req, res,next) => {
+exports.playerlist = catchAsync(async (req, res, next) => {
   const category = req.params.category;
   const group = req.params.group;
   try {
-    let record = await PlayerRanking.find({ category, group }); 
-
-    if (record) {
+    let record = await PlayerRanking.find({ category, group });
+    if (record?.length !== 0) {
       res.json({
         status: true,
         msg: "Data retrieved",
@@ -122,3 +121,4 @@ exports.playerlist = catchAsync(async (req, res,next) => {
     });
   }
 });
+
