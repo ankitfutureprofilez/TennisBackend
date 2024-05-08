@@ -1,34 +1,20 @@
-// const mongoose = require("mongoose");
-
-// const PlayerRankingSchema = mongoose.Schema({
-//   name: String,
-//   category: String,
-//   group: String,
-//   json: mongoose.Schema.Types.Mixed,
-//   updated_at: Date,
-//   date:String,
-// });
-
-// module.exports = mongoose.model("PlayerRanking", PlayerRankingSchema);
-
-
 const mongoose = require("mongoose");
-
 const PlayerRankingSchema = mongoose.Schema({
-  name: String,
-  category: String,
-  group: String,
-  json: {
-    Name: String,
-    Registration: String,
-    DateOfBirth: String,
-    FinalScore: Number,
-    Rank: Number,
-    State: String
+  category: String, // under_18
+  group: String, // B G M W
+  name: String, // ANKIT
+  rank: Number, // RANK #10
+  reg: Number, // REG NO
+  dob: String, // dob
+  state: String, // MP
+  final: Number, // 12.2
+  createdAt: { 
+    type : Date,
+    default: Date.now,
   },
-  updated_at: Date,
-  date: String,
+  updatedAt: { type : Date},
 });
 
-module.exports = mongoose.model("PlayerRanking", PlayerRankingSchema);
+module.exports = mongoose.model("rankings", PlayerRankingSchema);
+
 

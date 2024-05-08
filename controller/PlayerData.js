@@ -3,6 +3,7 @@ const PlayerRanking = require("../db/RankingData");
 const axios = require("axios");
 const multer = require("multer");
 const path = require("path");
+const RankingData = require("../db/RankingData");
 
 const options = [
   "GU-12",
@@ -115,64 +116,48 @@ exports.add = catchAsync(async (req, res) => {
     });
   }
 });
-
+if (pin !== process.env.SECRET_PIN) {
+  return res.status(400).json({
+    status: false,
+    message: "Invalid Secret Pin",
+  });
+}
 // exports.add = async (req, res) => {
 //   try {
-//     if (!req.body || Object.keys(req.body).length === 0) {
-//       return res.status(400).json({
-//         message: "No Data Sent",
-//         status: false,
-//       });
-//     }
-//     console.log("req.body,req.body",req.body)
+//     const { category, group, pin, json_data, date } = req.body;
 
-//     const { category, group, pin, text, date } = req.body;
-//     if (pin !== process.env.SECRET_PIN) {
-//       return res.status(400).json({
-//         status: false,
-//         message: "Invalid Secret Pin",
-//       });
-//     }
 
-//     let searchTerm = `${category}${group}`;
-//     console.log("Received data:", text); 
-//     const jsonData = JSON.parse(text);
-//     const playerRecords = [];
-//     let currentPlayer; 
-//     for (const player of jsonData) {
-//       currentPlayer = player; 
-//       const playerInfo = currentPlayer;
+//      let savedData ;
+//       console.log("json_data",JSON.parse(json_data))
+//       const json = JSON.parse(json_data)
+//       json.forEach(element => {
 
-//       console.log("Player Information:", playerInfo);
-//       const playerRecord = new PlayerRanking({
-//         name: searchTerm,
-//         category: category,
-//         group: group,
-//         json: playerInfo, 
-//         date: date,
-//         updated_at: Date.now()
-//       });
-//       try {
-//         console.log("playerRecord", playerRecord)
-//         const result = await playerRecord.save();
-//         console.log("result", result)
-//         console.log("Player Data Added Successfully");
-//         const daata = playerRecords.push(result);
-//         console.log("daata", daata)
-//       } catch (error) {
-//         console.error("Failed to add player data:", error);
-//         return res.status(500).json({
-//           status: false,
-//           message: "Failed to add player data",
-//           error: error
+//         console.log("element",element)
+//         const arr = [];
+//         const item = new RankingData({
+//           category: category,
+//           group: group,
+//           updated_at: date,
+//           name : element.Name || "dsfsd",
+//           dob : element.DOB,
 //         });
-//       }
+//         arr.push(item)
+//         item.save();
+//         savedData = arr;
+//       });
+//       if (savedData) {
+//         res.json({
+//           status: true,
+//           message: "Data Added Successfully",
+//         });
+//     } else {
+//       res.json({
+//         status: false,
+//         error: result,
+//         message: "Failed to add data",
+//       });
 //     }
-//     res.json({
-//       status: true,
-//       message: "Data Added Successfully",
-//       playerRecords: playerRecords
-//     });
+     
 //   } catch (error) {
 //     console.log("Facing Error:", error);
 //     res.status(500).json({
@@ -182,16 +167,11 @@ exports.add = catchAsync(async (req, res) => {
 //   }
 // };
 
-
-
-
-
-
 exports.list = catchAsync(async (req, res, next) => {
   const fileName = req.params.id;
   console.log("fileName", fileName)
   try {
-    let isPresent = await PlayerRanking.findOne({ name: fileName });
+    let isPresent = await PlayerRanking.find({ ctegi:ddsf, dgfsdf, });
     console.log("isPresent", isPresent)
     if (isPresent) {
       res.json({
