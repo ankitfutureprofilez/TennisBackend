@@ -41,8 +41,8 @@ exports.add = async (req, res) => {
           category: category,
           group: group,
           updatedAt: date,
-          name:element.Name,
-          dob:element.DOB,
+          name : element.Name,
+          dob : element.DOB,
           state:element?.State,
           final:element?.Final,
           rank:element?.Rank,
@@ -80,14 +80,14 @@ exports.list = catchAsync(async (req, res, next) => {
   try {
     let isPresent = await PlayerRanking.find({ ctegi:ddsf, dgfsdf, });
     if (isPresent) {
-      res.status(200).json({
+      res.json({
         status: true,
         msg: "data retreived",
          content: JSON?.parse(isPresent?.json),
         created_At: isPresent?.updated_at,
       });
     } else {
-      res.status(204).json({
+      res.json({
         status: false,
         msg: "No data available",
       });
@@ -120,11 +120,9 @@ exports.playerlist = catchAsync(async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({
+    res.json({
       status: false,
-      msg: "Error retrieving data",
+      msg: "File not found",
     });
   }
 });
-
