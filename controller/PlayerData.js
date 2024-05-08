@@ -16,7 +16,9 @@ const options = [
   "BU-1",
   "BU-18",
   "Msingles",
-  "Mdoubles", "Wsingles", "Wdoubles"
+  "Mdoubles", 
+  "Wsingles",
+   "Wdoubles"
 ];
 
 const upload = multer();
@@ -39,8 +41,8 @@ exports.add = async (req, res) => {
           category: category,
           group: group,
           updatedAt: date,
-          name : element.Name ,
-          dob : element.DOB,
+          name:element.Name,
+          dob:element.DOB,
           state:element?.State,
           final:element?.Final,
           rank:element?.Rank,
@@ -71,6 +73,8 @@ exports.add = async (req, res) => {
   }
 };
 
+
+
 exports.list = catchAsync(async (req, res, next) => {
   const fileName = req.params.id;
   try {
@@ -97,17 +101,17 @@ exports.list = catchAsync(async (req, res, next) => {
 });
 
 
-exports.playerlist = catchAsync(async (req, res,next) => {
+exports.playerlist = catchAsync(async (req, res, next) => {
   const category = req.params.category;
   const group = req.params.group;
   try {
-    let record = await PlayerRanking.find({ category, group }); 
-
-    if (record) {
+    let record = await PlayerRanking.find({ category, group });
+    if (record?.length !== 0) {
       res.json({
         status: true,
         msg: "Data retrieved",
         content: record,
+        updatedAt: record[0]?.updatedAt,
       });
     } else {
       res.json({
@@ -124,14 +128,3 @@ exports.playerlist = catchAsync(async (req, res,next) => {
   }
 });
 
-
-
-
-
-// const found = options.find((item) => item === searchTerm);
-// if (!found) {
-//   res.status(401).json({
-//     message: "Invalid category or group selected !!",
-//   });
-//   return;
-// }

@@ -7,6 +7,6 @@ router.post("/add", add);
 
 router.get("/list/:id", list);
 
-router.get("/playerlist/:category/:group", playerlist);
+router.get("/playerlist/:category:group", playerlist);
 
 module.exports =router;
