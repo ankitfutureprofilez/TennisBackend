@@ -16,7 +16,9 @@ const options = [
   "BU-1",
   "BU-18",
   "Msingles",
-  "Mdoubles", "Wsingles", "Wdoubles"
+  "Mdoubles", 
+  "Wsingles",
+   "Wdoubles"
 ];
 
 const upload = multer();
@@ -39,7 +41,7 @@ exports.add = async (req, res) => {
           category: category,
           group: group,
           updatedAt: date,
-          name : element.Name ,
+          name : element.Name,
           dob : element.DOB,
           state:element?.State,
           final:element?.Final,
@@ -70,6 +72,8 @@ exports.add = async (req, res) => {
     });
   }
 };
+
+
 
 exports.list = catchAsync(async (req, res, next) => {
   const fileName = req.params.id;
