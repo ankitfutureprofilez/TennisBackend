@@ -1,18 +1,45 @@
 const mongoose = require("mongoose");
 const PlayerRankingSchema = mongoose.Schema({
-  category: String, // under_18
-  group: String, // B G M W
-  name: String, // ANKIT
-  rank: Number, // RANK #10
-  reg: Number, // REG NO
-  dob: String, // dob
-  state: String, // MP
-  final: Number, // 12.2
-  createdAt: { 
-    type : Date,
+  category: {
+    type: String,
+    required: true,
+  }, // under_18
+  group: {
+    type: String,
+    required: true,
+  }, // B G M W
+  name: {
+    type: String,
+    required: true,
+  }, // ANKIT
+  rank: {
+    type: Number,
+    required: true,
+  }, // RANK #10
+  reg: {
+    type: Number,
+    required: true,
+  }, // REG NO
+  dob: {
+    type: String,
+    required: true,
+  }, // dob
+  state: {
+    type: String,
+    required: true,
+  }, // MP
+  final: {
+    type: Number,
+    required: true,
+  }, // 12.2
+  createdAt: {
+    type: Date,
     default: Date.now,
   },
-  updatedAt: { type : Date},
+  updatedAt: {
+    type: Date,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("rankings", PlayerRankingSchema);
