@@ -2,7 +2,6 @@ const catchAsync = require("../utils/catchAsync");
 
 exports.login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
-    // console.log("email",email)
     if (!email || !password) {
       return next(new AppError("Email and password is required !!", 401));
     }
