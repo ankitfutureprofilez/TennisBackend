@@ -4,6 +4,7 @@ const axios = require("axios");
 const multer = require("multer");
 const path = require("path");
 const RankingData = require("../db/RankingData");
+const APIFeature  =  require("../middleware/APlFeatures")
 
 const options = [
   "GU-12",
@@ -74,44 +75,56 @@ exports.add = async (req, res) => {
 };
 
 
-
-exports.list = catchAsync(async (req, res, next) => {
-  const fileName = req.params.id;
-  try {
-    let isPresent = await PlayerRanking.find({ ctegi:ddsf, dgfsdf, });
-    if (isPresent) {
-      res.json({
-        status: true,
-        msg: "data retreived",
-         content: JSON?.parse(isPresent?.json),
-        created_At: isPresent?.updated_at,
-      });
-    } else {
-      res.json({
-        status: false,
-        msg: "No data available",
-      });
-    }
-  } catch (error) {
-    res.json({
-      status: false,
-      msg: "File not found",
-    });
-  }
-});
-
+// exports.playerlist = catchAsync(async (req, res, next) => {
+//   const category = req.params.category;
+//   const group = req.params.group;
+//   try {
+//     const feature = new APIFeature( PlayerRanking.find(),req.query).paginate();
+//     const data = await feature.query;
+//     if (data?.length !== 0) {
+//       res.json({
+//         status: true,
+//         msg: "Data retrieved",
+//         content: data,
+//         updatedAt: data[0]?.updatedAt,
+//       });
+//     } else {
+//       res.json({
+//         status: false,
+//         msg: "No data available",
+//       });
+//     }
+//   } catch (error) {
+//     res.json({
+//       status: false,
+//       msg: "File not found",
+//     });
+//   }
+// });
 
 exports.playerlist = catchAsync(async (req, res, next) => {
   const category = req.params.category;
   const group = req.params.group;
   try {
-    let record = await PlayerRanking.find({ category, group });
-    if (record?.length !== 0) {
+    const feature = new APIFeature(PlayerRanking.find({ category, group }), req.query)
+      .paginate();
+    const data = await feature.query;
+    const totalCount = await PlayerRanking.countDocuments({ category, group });
+
+    if (data?.length !== 0) {
+      const perPage = parseInt(req.query.limit) || 10; // Default per_page to 10 if not provided in query
+      const currentPage = parseInt(req.query.page) || 1; // Default current_page to 1 if not provided in query
+      const totalPages = Math.ceil(totalCount / perPage);
+
       res.json({
         status: true,
         msg: "Data retrieved",
-        content: record,
-        updatedAt: record[0]?.updatedAt,
+        content: data,
+        updatedAt: data[0]?.updatedAt,
+        current_page: currentPage,
+        last_page: totalPages,
+        per_page: perPage,
+        total: totalCount
       });
     } else {
       res.json({
