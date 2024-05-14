@@ -25,9 +25,12 @@ const options = [
 const upload = multer();
 
 
+
+
 exports.add = async (req, res) => {
   try {
-    const { category, group, pin, json_data, date } = req.body;
+    console.log("req",req.body)
+    const { category, group, pin, json_data, updatedAt } = req.body;
     if (pin !== process.env.SECRET_PIN) {
       return res.status(400).json({
         status: false,
@@ -35,13 +38,15 @@ exports.add = async (req, res) => {
       });
     }
      let savedData ;
+
       const json = JSON.parse(json_data)
       json.forEach(element => {
         const arr = [];
         const item = new RankingData({
           category: category,
           group: group,
-          updatedAt: date,
+
+          updatedAt: updatedAt,
           name : element.Name,
           dob : element.DOB,
           state:element?.State,
@@ -50,6 +55,7 @@ exports.add = async (req, res) => {
           reg:element?.Reg,
         });
         arr.push(item)
+
         item.save();
         savedData = arr;
       });
@@ -73,6 +79,62 @@ exports.add = async (req, res) => {
     });
   }
 };
+// exports.add = async (req, res) => {
+//   try {
+//     const { category, group, pin, json_data, date } = req.body;
+//     if (pin !== process.env.SECRET_PIN) {
+//       return res.status(400).json({
+//         status: false,
+//         message: "Invalid Secret Pin",
+//       });
+//     }
+//     let savedData = [];
+//     const jsonData = JSON.parse(json_data);
+//     for (const element of jsonData) {
+//       const existingData = await RankingData.findOne({ name: element.Name });
+//       if (existingData) {
+//         // Update existing data
+//         existingData.category = category;
+//         existingData.group = group;
+//         existingData.updatedAt = date;
+//         existingData.dob = element.DOB;
+//         existingData.state = element?.State;
+//         existingData.final = element?.Final;
+//         existingData.rank = element?.Rank;
+//         existingData.reg = element?.Reg;
+//         await existingData.save();
+//         savedData.push(existingData);
+//       } else {
+//         // Add new data
+//         const newData = new RankingData({
+//           category: category,
+//           group: group,
+//           updatedAt: date,
+//           name: element.Name,
+//           dob: element.DOB,
+//           state: element?.State,
+//           final: element?.Final,
+//           rank: element?.Rank,
+//           reg: element?.Reg,
+//         });
+//         await newData.save();
+//         savedData.push(newData);
+//       }
+//     }
+//     res.json({
+//       status: true,
+//       message: "Data Added/Updated Successfully",
+//       data: savedData,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       status: false,
+//       message: "Error in adding/updating data",
+//     });
+//   }
+// };
+
 
 
 // exports.playerlist = catchAsync(async (req, res, next) => {
@@ -108,13 +170,17 @@ exports.playerlist = catchAsync(async (req, res, next) => {
   try {
     const feature = new APIFeature(PlayerRanking.find({ category, group }), req.query)
       .paginate();
-    const data = await feature.query;
+    let data = await feature.query;
     const totalCount = await PlayerRanking.countDocuments({ category, group });
-
+    
+    // Check if data exists
     if (data?.length !== 0) {
-      const perPage = parseInt(req.query.limit) || 10; // Default per_page to 10 if not provided in query
-      const currentPage = parseInt(req.query.page) || 1; // Default current_page to 1 if not provided in query
+      const perPage = parseInt(req.query.limit) || 10; 
+      const currentPage = parseInt(req.query.page) || 1; 
       const totalPages = Math.ceil(totalCount / perPage);
+      
+      // Sort the data by rank
+      data = data.sort((a, b) => a.rank - b.rank);
 
       res.json({
         status: true,
@@ -139,3 +205,4 @@ exports.playerlist = catchAsync(async (req, res, next) => {
     });
   }
 });
+
