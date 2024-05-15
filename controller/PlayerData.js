@@ -21,12 +21,7 @@ const options = [
   "Wsingles",
    "Wdoubles"
 ];
-
 const upload = multer();
-
-
-
-
 exports.add = async (req, res) => {
   try {
     console.log("req",req.body)
@@ -79,6 +74,7 @@ exports.add = async (req, res) => {
     });
   }
 };
+
 // exports.add = async (req, res) => {
 //   try {
 //     const { category, group, pin, json_data, date } = req.body;
@@ -137,51 +133,21 @@ exports.add = async (req, res) => {
 
 
 
-// exports.playerlist = catchAsync(async (req, res, next) => {
-//   const category = req.params.category;
-//   const group = req.params.group;
-//   try {
-//     const feature = new APIFeature( PlayerRanking.find(),req.query).paginate();
-//     const data = await feature.query;
-//     if (data?.length !== 0) {
-//       res.json({
-//         status: true,
-//         msg: "Data retrieved",
-//         content: data,
-//         updatedAt: data[0]?.updatedAt,
-//       });
-//     } else {
-//       res.json({
-//         status: false,
-//         msg: "No data available",
-//       });
-//     }
-//   } catch (error) {
-//     res.json({
-//       status: false,
-//       msg: "File not found",
-//     });
-//   }
-// });
+
 
 exports.playerlist = catchAsync(async (req, res, next) => {
   const category = req.params.category;
   const group = req.params.group;
   try {
-    const feature = new APIFeature(PlayerRanking.find({ category, group }), req.query)
+    const feature = new APIFeature(PlayerRanking.find({ category, group }).sort('rank'), req.query)
       .paginate();
     let data = await feature.query;
     const totalCount = await PlayerRanking.countDocuments({ category, group });
-    
-    // Check if data exists
     if (data?.length !== 0) {
       const perPage = parseInt(req.query.limit) || 10; 
       const currentPage = parseInt(req.query.page) || 1; 
       const totalPages = Math.ceil(totalCount / perPage);
-      
-      // Sort the data by rank
-      data = data.sort((a, b) => a.rank - b.rank);
-
+     
       res.json({
         status: true,
         msg: "Data retrieved",
@@ -205,4 +171,5 @@ exports.playerlist = catchAsync(async (req, res, next) => {
     });
   }
 });
+
 
