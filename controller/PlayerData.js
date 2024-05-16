@@ -1,5 +1,5 @@
 const catchAsync = require("../utils/catchAsync");
-const PlayerRanking = require("../db/RankingData");
+// const PlayerRanking = require("../db/RankingData");
 const axios = require("axios");
 const multer = require("multer");
 const path = require("path");
