@@ -3,8 +3,25 @@ const PlayerRanking = require("../db/RankingData");
 const axios = require("axios");
 const multer = require("multer");
 const path = require("path");
-const RankingData = require("../db/RankingData");
-const APIFeature  =  require("../middleware/APlFeatures")
+// const RankingData = require("../db/RankingData");
+// const BU_14_Rankings = require("../db/RankingData");
+// const BU_16_Rankings = require("../db/RankingData");
+// const BU_18_Rankings = require("../db/RankingData");
+const APIFeature = require("../middleware/APlFeatures");
+const {
+  BU_12_Rankings,
+  BU_14_Rankings,
+  BU_16_Rankings,
+  BU_18_Rankings,
+  GU_12_Rankings,
+  GU_14_Rankings,
+  GU_16_Rankings,
+  GU_18_Rankings,
+  Msingles_Rankings,
+  Mdoubles_Rankings,
+  Wsingles_Rankings,
+  Wdoubles_Rankings
+} = require("../db/RankingData");
 
 const options = [
   "GU-12",
@@ -17,48 +34,82 @@ const options = [
   "BU-1",
   "BU-18",
   "Msingles",
-  "Mdoubles", 
+  "Mdoubles",
   "Wsingles",
-   "Wdoubles"
+  "Wdoubles",
 ];
+
+const Tables = (tableName) => {
+  switch (tableName) {
+    case "BU_12_Rankings":
+      return BU_12_Rankings;
+    case "BU_14_Rankings":
+      return BU_14_Rankings;
+    case "BU_16_Rankings":
+      return BU_16_Rankings;
+    case "BU_18_Rankings":
+      return BU_18_Rankings;
+    case "GU_12_Rankings":
+      return GU_12_Rankings;
+    case "GU_14_Rankings":
+      return GU_14_Rankings;
+    case "GU_16_Rankings":
+      return GU_16_Rankings;
+    case "GU_18_Rankings":
+      return GU_18_Rankings;
+    case "Msingles_Rankings":
+      return Msingles_Rankings;
+    case "Mdoubles_Rankings":
+      return Mdoubles_Rankings;
+    case "Wsingles_Rankings":
+      return Wsingles_Rankings;
+    case "Wdoubles_Rankings":
+      return Wdoubles_Rankings;
+    default:
+      return res.json({
+        status: false,
+        message: "Invalid table name",
+      });
+  }
+};
+
 const upload = multer();
 exports.add = async (req, res) => {
   try {
-    console.log("req",req.body)
     const { category, group, pin, json_data, updatedAt } = req.body;
+    let tableName = category + group.replace("-", "_") + "_Rankings";
     if (pin !== process.env.SECRET_PIN) {
-      return res.status(400).json({
+      return res.json({
         status: false,
         message: "Invalid Secret Pin",
       });
     }
-     let savedData ;
+    let dynamicModel=Tables(tableName);
 
-      const json = JSON.parse(json_data)
-      json.forEach(element => {
-        const arr = [];
-        const item = new RankingData({
-          category: category,
-          group: group,
-
-          updatedAt: updatedAt,
-          name : element.Name,
-          dob : element.DOB,
-          state:element?.State,
-          final:element?.Final,
-          rank:element?.Rank,
-          reg:element?.Reg,
-        });
-        arr.push(item)
-
-        item.save();
-        savedData = arr;
+    let savedData;
+    const json = JSON.parse(json_data);
+    const arr = [];
+    json.forEach((element) => {
+      const item = new dynamicModel({
+        category: category,
+        group: group,
+        updatedAt: updatedAt,
+        name: element.Name,
+        dob: element.DOB,
+        state: element?.State,
+        final: element?.Final,
+        rank: element?.Rank,
+        reg: element?.Reg,
       });
-      if (savedData) {
-        res.json({
-          status: true,
-          message: "Data Added Successfully",
-        });
+      arr.push(item);
+      item.save();
+      savedData = arr;
+    });
+    if (savedData) {
+      res.json({
+        status: true,
+        message: "Data Added Successfully",
+      });
     } else {
       res.json({
         status: false,
@@ -66,9 +117,9 @@ exports.add = async (req, res) => {
         message: "Failed to add data",
       });
     }
-     
   } catch (error) {
-    res.status(500).json({
+    console.log("error", error);
+    res.json({
       status: false,
       message: "Error in adding data",
     });
@@ -131,23 +182,23 @@ exports.add = async (req, res) => {
 //   }
 // };
 
-
-
-
-
 exports.playerlist = catchAsync(async (req, res, next) => {
   const category = req.params.category;
   const group = req.params.group;
+  let tableName = category + group.replace("-", "_") + "_Rankings";
+    let dynamicModel=Tables(tableName);
   try {
-    const feature = new APIFeature(PlayerRanking.find({ category, group }).sort('rank'), req.query)
-      .paginate();
+    const feature = new APIFeature(
+      dynamicModel.find({}).sort("rank"),
+      req.query
+    ).paginate();
     let data = await feature.query;
-    const totalCount = await PlayerRanking.countDocuments({ category, group });
+    const totalCount = await dynamicModel.countDocuments({ });
     if (data?.length !== 0) {
-      const perPage = parseInt(req.query.limit) || 10; 
-      const currentPage = parseInt(req.query.page) || 1; 
+      const perPage = parseInt(req.query.limit) || 10;
+      const currentPage = parseInt(req.query.page) || 1;
       const totalPages = Math.ceil(totalCount / perPage);
-     
+
       res.json({
         status: true,
         msg: "Data retrieved",
@@ -156,7 +207,7 @@ exports.playerlist = catchAsync(async (req, res, next) => {
         current_page: currentPage,
         last_page: totalPages,
         per_page: perPage,
-        total: totalCount
+        total: totalCount,
       });
     } else {
       res.json({
@@ -171,5 +222,3 @@ exports.playerlist = catchAsync(async (req, res, next) => {
     });
   }
 });
-
-
