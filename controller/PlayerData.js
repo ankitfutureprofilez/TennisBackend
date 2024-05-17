@@ -1,7 +1,6 @@
 const catchAsync = require("../utils/catchAsync");
 const PlayerRanking = require("../db/RankingData");
 const axios = require("axios");
-const multer = require("multer");
 const path = require("path");
 // const RankingData = require("../db/RankingData");
 // const BU_14_Rankings = require("../db/RankingData");
@@ -73,7 +72,6 @@ const Tables = (tableName) => {
   }
 };
 
-const upload = multer();
 exports.add = async (req, res) => {
   try {
     const { category, group, pin, json_data, updatedAt } = req.body;
