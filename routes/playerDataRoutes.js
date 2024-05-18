@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const {add,playerlist} = require("../controller/PlayerData.js")
 const fs = require('fs');
-// const allowCors = require("../middleware/cors.js");
-
 router.post("/add", add);
 
 
