@@ -220,3 +220,38 @@ exports.playerlist = catchAsync(async (req, res, next) => {
     });
   }
 });
+
+
+exports.particularplayer = catchAsync(async (req, res, next) => {
+  const category = req.params.category;
+  const group = req.params.group;
+  const reg = req.params.reg;
+
+  console.log("reg", reg);
+
+  let tableName = category + group.replace("-", "_") + "_Rankings";
+  let dynamicModel = Tables(tableName);
+
+  try {
+    const data = await dynamicModel.find({ reg: reg }); 
+
+    if (data.length !== 0) {
+      res.json({
+        status: true,
+        msg: "Data retrieved",
+        content: data,
+      });
+    } else {
+      res.json({
+        status: false,
+        msg: "No data available",
+      });
+    }
+  } catch (error) {
+    res.json({
+      status: false,
+      msg: "File not found",
+    });
+  }
+});
+
