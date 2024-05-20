@@ -227,7 +227,6 @@ exports.particularplayer = catchAsync(async (req, res, next) => {
   const group = req.params.group;
   const reg = req.params.reg;
 
-  console.log("reg", reg);
 
   let tableName = category + group.replace("-", "_") + "_Rankings";
   let dynamicModel = Tables(tableName);
